@@ -1,11 +1,11 @@
 //For each word, we have a (Linked)List of Tuples that appear on various webpages. Interesting class.
-//have to take a look at HashT and getTerm Freq
+//It stores all the positions in all the webpages.
 
 public class WordEntry{
     String word;
     MyLinkedList<Position> poslist = new MyLinkedList<>();
     public WordEntry(String word){
-        word = word;
+        this.word = word;
     }
     public void addPosition(Position position) {
         poslist.addElement(position);
@@ -21,5 +21,6 @@ public class WordEntry{
     }
     public float getTermFrequency(String word){
         //return the term frequency of the word in a webpage
+        return 0;
     }
 }

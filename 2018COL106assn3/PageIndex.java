@@ -1,7 +1,7 @@
-//This stores all the unique word's entries FOR EACH WEBPAGE(Document)
+//This stores the unique wordEntries for 1 webpage 
 
 public class PageIndex{
-    MyLinkedList<WordEntry> wordlist = new MyLinkedList<>();
+    MyLinkedList<WordEntry> wordlist = new MyLinkedList<>(); //This will contain all those WEntries for the current document
     public void addPositionForWord(String str, Position p) {
         for (int i = 0; i< wordlist.length();i++){
             WordEntry currEle = wordlist.getElementByIndex (i);

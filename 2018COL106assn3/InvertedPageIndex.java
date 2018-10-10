@@ -4,6 +4,7 @@ public class InvertedPageIndex{
         entries.addElement(p);
     }
     public Myset<PageEntry> getPagesWhichContainWord(String str) {
+        return null;
         //return set of page-entries of webpages which contain the word str
     }
 
