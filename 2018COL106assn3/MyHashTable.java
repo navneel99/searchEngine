@@ -1,3 +1,5 @@
+import java.util.*;
+import java.io.*;
 public class MyHashTable{
     MyLinkedList<WordEntry>[] mainArray = new MyLinkedList[26];
     public MyHashTable(){
@@ -18,26 +20,21 @@ public class MyHashTable{
         String word = w.word;
         int index = this.getHashIndex(word);
         MyLinkedList<WordEntry> chain = mainArray[index];
+        boolean tVal =true;
         for (int i = 0; i< chain.length();i++){
             WordEntry currEle = chain.getElementByIndex(i);
             if(currEle.word == w.word){
                 currEle.addPositions(w.getAllPositionsForThisWord());
+                tVal = false;
                 break;
             } else {
                 continue;
             }
 
         }
-        chain.addElement(w);
-    }
-    public static void main(String[] args) {
-        System.out.println("yo");
-        MyHashTable lol =new MyHashTable();
-        WordEntry w1 = new WordEntry("Navneel");
-        System.out.println(w1.word);
-        lol.addPositionsForWord(w1);
-        System.out.println(lol.mainArray.length);
-
+        if (tVal){
+            chain.addElement(w);
+        }
     }
 }
 

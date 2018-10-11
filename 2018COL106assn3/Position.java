@@ -1,14 +1,14 @@
 // It stores a tuple (p,w) 
 
 public class Position{  
-    PageEntry p; //Page position p
+    PageEntry page; //Page position p
     int i; // Word position w
     public Position(PageEntry p, int wordIndex){
-        p = p;
+        page = p;
         i = wordIndex;
     }
     public PageEntry getPageEntry() {
-        return p;
+        return page;
     }
     public int getWordIndex(){
         return i;
