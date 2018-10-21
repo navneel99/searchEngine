@@ -63,4 +63,11 @@ public class PageEntry{
     public PageIndex getPageIndex(){
         return index; //Return the list
     }
+    public float getRelevanceOfPage(String str[], boolean doTheseWordsRepresentAPhrase){
+        if (doTheseWordsRepresentAPhrase){
+            //Phrase Query
+        } else {
+            //AND/OR query
+        }
+    }
 }

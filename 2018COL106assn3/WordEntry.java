@@ -19,8 +19,22 @@ public class WordEntry{
     public MyLinkedList<Position> getAllPositionsForThisWord(){
         return poslist;
     }
-    public float getTermFrequency(String word){
-        //return the term frequency of the word in a webpage
-        return 0;
+    public float getTermFrequency(PageEntry p){
+        int totWords = p.getPageIndex().getWordEntries().length();
+        float occInPage = 0;
+        for (int i = 0;i<poslist.length();i++){
+            Position currEle = poslist.getElementByIndex(i);
+            if ( (p.page).equals(currEle.page.page)){
+                occInPage++
+            }
+        }
+        float tf = occInPage/totWords;
+        return tf;
+    }
+    public static void main(String[] args) {
+        WordEntry a = new WordEntry("lol");
+        PageEntry p = new PageEntry("stackoverflow");
+        WordEntry w = p.index.wordlist.getElementByIndex(0);
+        System.out.println(w.getTermFrequency(p));
     }
 }

@@ -39,5 +39,8 @@ public class InvertedPageIndex{
         return tempPages;
         //return set of page-entries of webpages which contain the word str
     }
+    public Myset<PageEntry>getPagesWhichContainPhrase(String str[]){
+        return null;
+    }
 
 }
