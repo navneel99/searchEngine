@@ -63,11 +63,40 @@ public class PageEntry{
     public PageIndex getPageIndex(){
         return index; //Return the list
     }
+    public MyLinkedList<Position> getPositionsForWord(String str){
+        MyLinkedList<WordEntry> currPageIndex = this.index.getWordEntries();
+        for (int k = 0; k< currPageIndex.length();k++){
+            WordEntry currEle = currPageIndex.getElementByIndex(k); 
+            if ((currEle.word).equals(str)){
+                return currEle.getAllPositionsForThisWord();
+            } else {
+                continue;
+            }
+        }
+        return null;
+    }
+
     public float getRelevanceOfPage(String str[], boolean doTheseWordsRepresentAPhrase){
+        float rel = 0;
         if (doTheseWordsRepresentAPhrase){
             //Phrase Query
         } else {
-            //AND/OR query
+            for(int i = 0;i<str.length;i++){
+                String currWord = str[i];
+                for (int j = 0; j<index.wordlist.length();j++){
+                    WordEntry currWE = index.wordlist.getElementByIndex(j);
+                    if((currWE.word).equals(currWord)){
+                        float tf = currWE.getTermFrequency(this);
+                        float idf = InvertedPageIndex.inverseDocumentFrequency(currWE.word);
+                        rel = rel + (tf * idf);
+                        break;
+                    } else{
+                        continue;
+                    }
+                }
+            }
         }
+        return 0;
     }
+
 }

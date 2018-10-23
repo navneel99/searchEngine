@@ -25,16 +25,21 @@ public class WordEntry{
         for (int i = 0;i<poslist.length();i++){
             Position currEle = poslist.getElementByIndex(i);
             if ( (p.page).equals(currEle.page.page)){
-                occInPage++
+                occInPage++;
             }
         }
         float tf = occInPage/totWords;
         return tf;
     }
     public static void main(String[] args) {
+        InvertedPageIndex ipi = new InvertedPageIndex();
         WordEntry a = new WordEntry("lol");
         PageEntry p = new PageEntry("stackoverflow");
+        PageEntry q = new PageEntry("stackmagazine");
         WordEntry w = p.index.wordlist.getElementByIndex(0);
-        System.out.println(w.getTermFrequency(p));
+        ipi.addPage(p);
+        ipi.addPage(q);
+        //System.out.println(w.getTermFrequency(p));
+        System.out.println(InvertedPageIndex.wordwisePageList);
     }
 }

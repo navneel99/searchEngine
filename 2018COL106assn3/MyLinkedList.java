@@ -1,5 +1,5 @@
 public class MyLinkedList<T>{
-    public Node head;
+    public Node<T> head;
     public MyLinkedList() {
         head = null;
     }
@@ -8,7 +8,7 @@ public class MyLinkedList<T>{
         if (currHead == null){
             head = new Node<T>(element);
         } else {
-            Node newHead = new Node<T>(element);
+            Node<T> newHead = new Node<T>(element);
             newHead.next = currHead;
             head = newHead;
         }
@@ -18,7 +18,7 @@ public class MyLinkedList<T>{
         int size = 0;
         while (pos != null){
             size+=1;
-            pos = pos.next;
+             pos = pos.next;
         }
         return size;
     }

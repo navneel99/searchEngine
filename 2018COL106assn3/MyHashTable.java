@@ -8,7 +8,6 @@ public class MyHashTable{
             mainArray[i] = obj;
         } 
     }
-    
     //MyLinkedList<MyLinkedList<Integer>> mainList = new MyLinkedList<>();
     private int getHashIndex(String str) {
         char first = str.charAt(0);

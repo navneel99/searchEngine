@@ -23,8 +23,6 @@ public class PageIndex{
         }
         
     }
-
-
     public MyLinkedList<WordEntry> getWordEntries() {
         return wordlist;
     }
