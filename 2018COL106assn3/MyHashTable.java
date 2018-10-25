@@ -1,4 +1,7 @@
 import java.util.*;
+
+//import org.graalvm.compiler.word.Word;
+
 import java.io.*;
 public class MyHashTable{
     MyLinkedList<WordEntry>[] mainArray = new MyLinkedList[26];
@@ -15,6 +18,19 @@ public class MyHashTable{
         ascii =ascii%26;
         return ascii;
     }
+    public int pubHashIndex(String str){
+        return getHashIndex(str);
+    }
+    public WordEntry getWordEntryFromHashTable(String str){
+        MyLinkedList<WordEntry> chaining =  this.mainArray[this.pubHashIndex(str)];
+        for(int i =0 ; i< chaining.length();i++){
+            WordEntry currWE = chaining.getElementByIndex(i);
+            if (currWE.word.equals(str)){
+                return currWE;
+            }
+        }
+        return null;
+    }
     public void addPositionsForWord(WordEntry w) {
         String word = w.word;
         int index = this.getHashIndex(word);
@@ -22,7 +38,7 @@ public class MyHashTable{
         boolean tVal =true;
         for (int i = 0; i< chain.length();i++){
             WordEntry currEle = chain.getElementByIndex(i);
-            if(currEle.word == w.word){
+            if(currEle.word.equals(w.word)){
                 currEle.addPositions(w.getAllPositionsForThisWord());
                 tVal = false;
                 break;

@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class SearchEngine{
     InvertedPageIndex ipi;
     public SearchEngine(){
@@ -35,10 +38,12 @@ public class SearchEngine{
             String word = message[1];
             String page = message[2];
             boolean pCheck = true;
+            boolean pCheck2 = false;
             Myset<PageEntry> entries = ipi.entries;
             for (int i = 0; i< entries.list.length();i++){
                 PageEntry currPage = entries.list.getElementByIndex(i);
                 if (page.equals(currPage.page)){
+                    pCheck2 = true;
                     PageIndex currIndex = currPage.getPageIndex();
                     MyLinkedList<WordEntry> words = currIndex.getWordEntries();
                     for (int j =0;j<words.length();j++){
@@ -63,10 +68,103 @@ public class SearchEngine{
                     continue;
                 }
             }
-            if (pCheck == true){
+            if (pCheck2 == false){
+                System.out.println("Webpage "+ page+" doesn't exist.");
+            }
+            else if (pCheck == true){
                 System.out.println("Webpage "+page+" does not contain word "+word);
             }
+        } else if(message[0].equals("queryFindPagesWhichContainAllWords")){
+            System.out.print(message[0]+": ");
+            String[] words = Arrays.copyOfRange(message,1,message.length);
+            Myset<PageEntry> pages = ipi.getPagesWhichContainWord(words[0]);
+            Myset<SearchResult> srs = new Myset<>();
+            for (int i = 1; i< words.length;i++){
+                //System.out.println(ipi.getPagesWhichContainWord(words[i]).list.length());
+                pages = pages.intersection(ipi.getPagesWhichContainWord(words[i]));
+            }
+            for (int j = 0;j<pages.list.length();j++){
+                PageEntry currPage = pages.list.getElementByIndex(j);
+                float currRel = currPage.getRelevanceOfPage(words, false, ipi);
+                //System.out.println("lolol"+ currRel);
+                SearchResult currSR = new SearchResult(currPage, currRel);
+                srs.addElement(currSR);
+            }
+            //System.out.println("before: "+srs.list.getElementByIndex(0).page.page);
+            MySort<SearchResult> newMySort = new MySort<>();
+            ArrayList<SearchResult> arraySearchResults =  newMySort.sortThisList(srs);
+            //System.out.println("after: "+arraySearchResults.get(0).page.page);
+            for (int k = 0;k < arraySearchResults.size();k++){
+                SearchResult currSR = arraySearchResults.get(k);
+                //System.out.println("Page Name: "+currSR.page.page+" Relevance: "+currSR.relevance);
+                System.out.print(currSR.page.page);                
+                if (k != arraySearchResults.size()-1){
+                    System.out.print(", ");
+                }else{
+                    System.out.println("");
+                }
+            }
+            //System.out.println(InvertedPageIndex.wordwisePageList);
 
+        } else if(message[0].equals("queryFindPagesWhichContainAnyOfTheseWords")){
+            System.out.print(message[0]+": ");            
+            String[] words = Arrays.copyOfRange(message,1,message.length);
+            Myset<SearchResult> srs = new Myset<>();
+            Myset<PageEntry> pages = ipi.getPagesWhichContainWord(words[0]);
+            for (int i = 1; i< words.length;i++){
+                pages = pages.union(ipi.getPagesWhichContainWord(words[i]));
+            }
+            //System.out.println(pages.list.length());
+            for (int j = 0;j<pages.list.length();j++){
+                PageEntry currPage = pages.list.getElementByIndex(j);
+                float currRel = currPage.getRelevanceOfPage(words, false, ipi);
+                //System.out.println("lolol"+ currRel);
+                SearchResult currSR = new SearchResult(currPage, currRel);
+                srs.addElement(currSR);
+            }
+            //System.out.println("before: "+srs.list.getElementByIndex(0).page.page);
+            MySort<SearchResult> newMySort = new MySort<>();
+            ArrayList<SearchResult> arraySearchResults =  newMySort.sortThisList(srs);
+            //System.out.println("after: "+arraySearchResults.get(0).page.page);
+            for (int k = 0;k < arraySearchResults.size();k++){
+                SearchResult currSR = arraySearchResults.get(k);
+                //System.out.println("Page Name: "+currSR.page.page+" Relevance: "+currSR.relevance);
+                System.out.print(currSR.page.page);                
+                if (k != arraySearchResults.size()-1){
+                    System.out.print(", ");
+                } else{
+                    System.out.println("");
+                }
+            }
+        
+        } else if(message[0].equals("queryFindPagesWhichContainPhrase")){
+            System.out.print(message[0]+": ");            
+            String[] words = Arrays.copyOfRange(message,1,message.length);
+            Myset<SearchResult> srs = new Myset<>();
+            Myset<PageEntry> pages = ipi.getPagesWhichContainPhrase(words);
+            //for (int i = 1; i< words.length;i++){
+            //    pages = pages.union(ipi.getPagesWhichContainWord(words[i]));
+            //}
+            //System.out.println(pages.list.length());
+            for (int j = 0;j<pages.list.length();j++){
+                PageEntry currPage = pages.list.getElementByIndex(j);
+                float currRel = currPage.getRelevanceOfPage(words, true, ipi);
+                //System.out.println("lolol"+ currRel);
+                SearchResult currSR = new SearchResult(currPage, currRel);
+                srs.addElement(currSR);
+            }
+            MySort<SearchResult> newMySort = new MySort<>();
+            ArrayList<SearchResult> arraySearchResults =  newMySort.sortThisList(srs);
+            for (int k = 0;k < arraySearchResults.size();k++){
+                SearchResult currSR = arraySearchResults.get(k);
+                //System.out.println("Page Name: "+currSR.page.page+" Relevance: "+currSR.relevance);
+                System.out.print(currSR.page.page);
+                if (k != arraySearchResults.size()-1){
+                    System.out.print(", ");
+                } else{
+                    System.out.println("");
+                }
+            }
         } else {
             System.out.println("Wrong Query Message");
         }
@@ -90,6 +188,7 @@ public class SearchEngine{
         s.performAction("addPage stacklighting");
         s.performAction("addPage stackmagazine");
         s.performAction("queryFindPagesWhichContainWord magazines");
+        s.performAction("queryFindPagesWhichContainAllWords stack function only" );
         //System.out.println("Done!");
     }
 }
