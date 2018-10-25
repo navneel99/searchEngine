@@ -54,7 +54,7 @@ public class InvertedPageIndex{
         //return set of page-entries of webpages which contain the word str
     }
     
-    public Myset<PageEntry>getPagesWhichContainPhrase(String str[]){
+    /*public Myset<PageEntry>getPagesWhichContainPhrase(String str[]){
         Myset<PageEntry> allPages = getPagesWhichContainWord(str[0]);
         Myset<PageEntry> actualPage = new Myset<>();
         for (int i = 1; i<str.length;i++){
@@ -63,30 +63,7 @@ public class InvertedPageIndex{
         }
         for (int j = 0; j< allPages.list.length();j++){
             PageEntry currPage = allPages.list.getElementByIndex(j); // We will work each page one by one
-            /*for (int k = 0; k< currPage.wholeTextArrayWithStopWords.length;k++){
-                 String currWord = currPage.wholeTextArrayWithStopWords[k];
-                 if (currWord.equals(str[0])){
-                     boolean fCheck =true;
-                     for (int l =0;l<str.length;l++){
-                         int m =l;
-                         String[] stopWords = {"a","an","the","they","these","this","for","is","are","was","of","or","and","does","will","whose"};
-                         boolean check = true;
-                         String currWord2 = currPage.wholeTextArrayWithStopWords[m];
-                         for (int z =0; z<stopWords.length;z++){
-                             if (currWord2.equals(stopWords[z])){
-                                 check = false;
-                                 break;
-                             }
-                         }
-                         if (check =true){ //it is not a stop word
-
-                         } else{
-
-                         }
-                     }
-
-                 }
-            }*/
+            
             MyLinkedList<Position> firstPosList = currPage.getPositionsForWord(str[0]); //First word's list of positions got.
             for (int k = 1; k<str.length;k++){
                 String word  = str[k];
@@ -101,15 +78,7 @@ public class InvertedPageIndex{
                                 newPosList.addElement(currPos);
                             }
                     }
-                    /*for (int m = 0; m<firstPosList.length();m++){
-                        Position oldPos = firstPosList.getElementByIndex(m);
-                        if(currPos.i-oldPos.i == 1){
-                            newPosList.addElement(currPos);
-                            break;
-                        } else{
-                            continue;
-                        }
-                    }*/
+                    
                 }
                 firstPosList = newPosList;
             }
@@ -121,8 +90,42 @@ public class InvertedPageIndex{
         }
         //numberWherePhrase = actualPage.list.length();
         return actualPage;
-    }
+    }*/
     
+    public Myset<PageEntry>getPagesWhichContainPhrase(String str[]){
+        Myset<PageEntry> allPages = getPagesWhichContainWord(str[0]);
+        Myset<PageEntry> actualPage = new Myset<>();
+        for (int i = 1; i<str.length;i++){
+            String currWord = str[i];
+            allPages = allPages.intersection(getPagesWhichContainWord(currWord)); //Get the minimum number of pages which contain all the words
+        }
+        // We now have a set of pages which contain all the words.
+        for (int i =0; i<allPages.list.length();i++){
+            PageEntry nowPage = allPages.list.getElementByIndex(i);
+            //Now check;
+            for (int j =0; j< nowPage.wholeTextArrayWithoutStopWords.length();j++){
+                String nowWord = nowPage.wholeTextArrayWithoutStopWords.getElementByIndex(j);
+                //System.out.println(nowWord);
+                if (nowWord.equals(str[0])){
+                    boolean tVal = true;
+                    for (int k =1; k<str.length;k++){
+                        if (str[k].equals(nowPage.wholeTextArrayWithoutStopWords.getElementByIndex(j+k))){
+                            //System.out.println();
+                            continue;
+                        } else{
+                            tVal = false;
+                            break;
+                        }
+                    }
+                    if (tVal){
+                        actualPage.addElement(nowPage);
+                        break;
+                    }
+                }
+            }
+        }
+        return actualPage;
+    }
     static float inverseDocumentFrequency(String word){
         double N = Math.log((double)InvertedPageIndex.numberEntries);
         double nw = Math.log((double)InvertedPageIndex.wordwisePageList.get(word));
@@ -130,12 +133,5 @@ public class InvertedPageIndex{
         //System.out.println(word+" "+ InvertedPageIndex.wordwisePageList.get(word));
         return (float)idf;
     }
-    /*static float idfForPhrase(String str[]){
-        double N = Math.log((double)InvertedPageIndex.numberEntries);
-        //double nw = Math.log((double)InvertedPageIndex.wordwisePageList.get(word));
-        double idf = (N/nw);
-        //System.out.println(word+" "+ InvertedPageIndex.wordwisePageList.get(word));
-        return (float)idf;
-    }*/
     
 }

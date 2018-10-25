@@ -20,8 +20,35 @@ public class SearchEngine{
             word2 = word2.replace("structures","structure");
             word2 = word2.replace("applications","application");
             Myset<PageEntry> entries = ipi.getPagesWhichContainWord(word2);
+            if (entries.list.length() != 0){
+                String[] word3 = {word2};
+                Myset<SearchResult> srs = new Myset<>();
+                for (int j = 0;j<entries.list.length();j++){
+                    PageEntry currPage = entries.list.getElementByIndex(j);
+                    float currRel = currPage.getRelevanceOfPage(word3, false, ipi);
+                    SearchResult currSR = new SearchResult(currPage, currRel);
+                    srs.addElement(currSR);
+                }
+                //System.out.println("before: "+srs.list.getElementByIndex(0).page.page);
+                MySort<SearchResult> newMySort = new MySort<>();
+                ArrayList<SearchResult> arraySearchResults =  newMySort.sortThisList(srs);
+                //System.out.println("after: "+arraySearchResults.get(0).page.page);
+                for (int k = 0;k < arraySearchResults.size();k++){
+                    SearchResult currSR = arraySearchResults.get(k);
+                    //System.out.println("Page Name: "+currSR.page.page+" Relevance: "+currSR.relevance);
+                    System.out.print(currSR.page.page);                
+                    if (k != arraySearchResults.size()-1){
+                        System.out.print(", ");
+                    }else{
+                        System.out.println("");
+                    }
+                }
+            } else{
+                System.out.println("No webpage contains word "+word);
+            }
+            
             //System.out.println(entries.list.length());
-            if(entries.list.length()!= 0){
+            /*if(entries.list.length()!= 0){
                 for (int i = 0 ; i< entries.list.length();i++){
                     System.out.print(entries.list.getElementByIndex(i).page);
                     if (i != entries.list.length()-1){
@@ -33,7 +60,7 @@ public class SearchEngine{
                 }
             }else{
                 System.out.println("No webpage contains word "+word);
-            }
+            }*/
         }else if(message[0].equals("queryFindPositionsOfWordInAPage")){
             String word = message[1];
             String page = message[2];
@@ -142,10 +169,6 @@ public class SearchEngine{
             String[] words = Arrays.copyOfRange(message,1,message.length);
             Myset<SearchResult> srs = new Myset<>();
             Myset<PageEntry> pages = ipi.getPagesWhichContainPhrase(words);
-            //for (int i = 1; i< words.length;i++){
-            //    pages = pages.union(ipi.getPagesWhichContainWord(words[i]));
-            //}
-            //System.out.println(pages.list.length());
             for (int j = 0;j<pages.list.length();j++){
                 PageEntry currPage = pages.list.getElementByIndex(j);
                 float currRel = currPage.getRelevanceOfPage(words, true, ipi);

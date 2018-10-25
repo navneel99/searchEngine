@@ -6,6 +6,7 @@ public class PageEntry{
     PageIndex index = new PageIndex();
     String wholeText;
     String[] wholeTextArrayWithStopWords;
+    MyLinkedList<String> wholeTextArrayWithoutStopWords = new MyLinkedList<>();
 
     public PageEntry(String pageName){
         this.createPageIndex(pageName);
@@ -50,7 +51,8 @@ public class PageEntry{
                 }
                 if(check == true){    
                     Position pos = new Position(this,i+1);
-                    //System.out.println(pos.page);
+                    //System.out.println(pos.i);
+                    wholeTextArrayWithoutStopWords.addElement(wholeTextArray[i]);
                     index.addPositionForWord(currEle,pos);
                     //System.out.println("Check");
                 }
@@ -105,9 +107,6 @@ public class PageEntry{
 
     public float getRelevanceOfPage(String str[], boolean doTheseWordsRepresentAPhrase, InvertedPageIndex ipi){
         float rel = 0;
-        /*if(this.page.equals("stack_cprogramming")){
-            System.out.println("Final check: "+WordEntry.getTotalNumberOfWords(this));
-        }*/
         if (doTheseWordsRepresentAPhrase){
             //Phrase Query
             int m = this.getNumberOfTimesPhraseOccurs(str);

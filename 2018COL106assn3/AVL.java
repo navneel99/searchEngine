@@ -11,8 +11,6 @@ class AVLNode{
         this.height = 1;
     }
 }
-
-
 public class AVL{
     AVLNode root;
 
