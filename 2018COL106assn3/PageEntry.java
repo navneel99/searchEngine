@@ -31,7 +31,7 @@ public class PageEntry{
                 temp = temp.replace("applications","application");        
                 wholeText+=temp+" ";
             }
-            //wholeText = wholeText.replace("     "," ");
+            //wholeText = wholeText.replace("         "," ");
             //wholeText = wholeText.replace("   "," ");
             //wholeText = wholeText.replace("  "," ");
             wholeText = wholeText.replaceAll("^ +| +$|( )+", "$1");
@@ -112,7 +112,10 @@ public class PageEntry{
             int m = this.getNumberOfTimesPhraseOccurs(str);
             float wp = WordEntry.getTotalNumberOfWords(this);
             float denominator = wp - (m*(str.length - 1));
-            double multiplication = Math.log(ipi.entries.list.length())/Math.log(ipi.getPagesWhichContainPhrase(str).list.length());
+            double multiplication = Math.log(ipi.entries.list.length()/ipi.getPagesWhichContainPhrase(str).list.length());
+            if (multiplication == 0){
+                multiplication = 1;
+            }
             rel = (m/denominator)* (float)multiplication;
             return rel;
         } else {

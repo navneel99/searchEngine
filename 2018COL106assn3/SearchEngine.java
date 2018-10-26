@@ -14,6 +14,7 @@ public class SearchEngine{
             PageEntry PEpage = new PageEntry(page); //PageIndex made.
             ipi.addPage(PEpage);
         } else if(message[0].equals("queryFindPagesWhichContainWord")){
+            System.out.print(message[0]+": ");            
             String word = message[1];
             String word2 = word.toLowerCase();
             word2 = word2.replace("stacks","stack");
@@ -64,6 +65,7 @@ public class SearchEngine{
         }else if(message[0].equals("queryFindPositionsOfWordInAPage")){
             String word = message[1];
             String page = message[2];
+            System.out.print(message[0]+": ");            
             boolean pCheck = true;
             boolean pCheck2 = false;
             Myset<PageEntry> entries = ipi.entries;
@@ -80,17 +82,22 @@ public class SearchEngine{
                             MyLinkedList<Position> allPos = currWord.getAllPositionsForThisWord();
                             for (int l =0;l<allPos.length();l++){
                                 Position currPos =  allPos.getElementByIndex(l);
-                                System.out.print(currPos.i);
-                                if (l!= allPos.length()-1){
-                                    System.out.print(", ");
-                                } else {
+                                if (currPos.page.page.equals(page)){
+                                    System.out.print(currPos.i);
+                                    if (l!= allPos.length()-1){
+                                        System.out.print(", ");
+                                    }
+                                }
+                                if (l == allPos.length()-1) {
                                     System.out.print("\n");
                                 }
                             }
+                            break;
                         } else{
                             continue;
                         }
                     }
+                    break;
                 } else {
                     continue;
                 }
@@ -169,30 +176,35 @@ public class SearchEngine{
             String[] words = Arrays.copyOfRange(message,1,message.length);
             Myset<SearchResult> srs = new Myset<>();
             Myset<PageEntry> pages = ipi.getPagesWhichContainPhrase(words);
-            for (int j = 0;j<pages.list.length();j++){
-                PageEntry currPage = pages.list.getElementByIndex(j);
-                float currRel = currPage.getRelevanceOfPage(words, true, ipi);
-                //System.out.println("lolol"+ currRel);
-                SearchResult currSR = new SearchResult(currPage, currRel);
-                srs.addElement(currSR);
-            }
-            MySort<SearchResult> newMySort = new MySort<>();
-            ArrayList<SearchResult> arraySearchResults =  newMySort.sortThisList(srs);
-            for (int k = 0;k < arraySearchResults.size();k++){
-                SearchResult currSR = arraySearchResults.get(k);
-                //System.out.println("Page Name: "+currSR.page.page+" Relevance: "+currSR.relevance);
-                System.out.print(currSR.page.page);
-                if (k != arraySearchResults.size()-1){
-                    System.out.print(", ");
-                } else{
-                    System.out.println("");
+            if (pages.list.length() != 0){
+                for (int j = 0;j<pages.list.length();j++){
+                    PageEntry currPage = pages.list.getElementByIndex(j);
+                    float currRel = currPage.getRelevanceOfPage(words, true, ipi);
+                    //System.out.println("lolol"+ currRel);
+                    SearchResult currSR = new SearchResult(currPage, currRel);
+                    srs.addElement(currSR);
                 }
+                MySort<SearchResult> newMySort = new MySort<>();
+                ArrayList<SearchResult> arraySearchResults =  newMySort.sortThisList(srs);
+                for (int k = 0;k < arraySearchResults.size();k++){
+                    SearchResult currSR = arraySearchResults.get(k);
+                    //System.out.println("Page Name: "+currSR.page.page+" Relevance: "+currSR.relevance);
+                    System.out.print(currSR.page.page);
+                    if (k != arraySearchResults.size()-1){
+                        System.out.print(", ");
+                    } else{
+                        System.out.println("");
+                    }
+                }
+            } else{
+                System.out.println("No webpage contains the given phrase.");
             }
+            
         } else {
             System.out.println("Wrong Query Message");
         }
     }
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         SearchEngine s =new SearchEngine();
         s.performAction("addPage stack_datastructure_wiki");
         s.performAction("queryFindPagesWhichContainWord delhi");
@@ -213,7 +225,7 @@ public class SearchEngine{
         s.performAction("queryFindPagesWhichContainWord magazines");
         s.performAction("queryFindPagesWhichContainAllWords stack function only" );
         //System.out.println("Done!");
-    }
+    }*/
 }
 /*
 addPage stack_datastructure_wiki
