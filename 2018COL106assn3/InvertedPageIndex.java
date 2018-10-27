@@ -1,4 +1,5 @@
 import java.util.*;
+
 public class InvertedPageIndex{
     static float numberEntries = 0;
     static float numberWherePhrase = 0;
@@ -103,14 +104,15 @@ public class InvertedPageIndex{
         for (int i =0; i<allPages.list.length();i++){
             PageEntry nowPage = allPages.list.getElementByIndex(i);
             //Now check;
-            for (int j =0; j< nowPage.wholeTextArrayWithoutStopWords.length();j++){
-                String nowWord = nowPage.wholeTextArrayWithoutStopWords.getElementByIndex(j);
+            for (int j =0; j< nowPage.textAVLTree.length();j++){
+                String nowWord = nowPage.textAVLTree.inOrderSuccessor(j);
                 //System.out.println(nowWord);
                 if (nowWord.equals(str[0])){
                     boolean tVal = true;
                     for (int k =1; k<str.length;k++){
-                        if (str[k].equals(nowPage.wholeTextArrayWithoutStopWords.getElementByIndex(j+k))){
-                            //System.out.println();
+                        WordEntry we;
+                        if (str[k].equals(nowPage.textAVLTree.inOrderSuccessor(j+k))){
+                            //System.out.println(str.length);
                             continue;
                         } else{
                             tVal = false;

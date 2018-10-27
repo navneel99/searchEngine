@@ -61,6 +61,15 @@ public class MyLinkedList<T>{
             }
         }
     }
+    public T inOrderSuccessor(int index){
+        int curr = this.length()-1;
+        Node<T> pos = head;
+        while (curr != index){
+            curr -=1;
+            pos = pos.next;
+        }
+        return pos.get();   
+    }
     public static void main(String[] args) {
         //System.out.println("Lol");
         MyLinkedList <Integer> list = new MyLinkedList<>();

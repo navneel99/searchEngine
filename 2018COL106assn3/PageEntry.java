@@ -6,7 +6,7 @@ public class PageEntry{
     PageIndex index = new PageIndex();
     String wholeText;
     String[] wholeTextArrayWithStopWords;
-    MyLinkedList<String> wholeTextArrayWithoutStopWords = new MyLinkedList<>();
+    pageEntryAVL<String> textAVLTree = new pageEntryAVL<>();
 
     public PageEntry(String pageName){
         this.createPageIndex(pageName);
@@ -52,7 +52,7 @@ public class PageEntry{
                 if(check == true){    
                     Position pos = new Position(this,i+1);
                     //System.out.println(pos.i);
-                    wholeTextArrayWithoutStopWords.addElement(wholeTextArray[i]);
+                    textAVLTree.addElement(wholeTextArray[i]);
                     index.addPositionForWord(currEle,pos);
                     //System.out.println("Check");
                 }
@@ -127,7 +127,10 @@ public class PageEntry{
                     if(currWE.word.equals(currWord)){
                         float tf = currWE.getTermFrequency(this);
                         //float idf = InvertedPageIndex.inverseDocumentFrequency(currWE.word);
-                        double idf = Math.log(ipi.entries.list.length())/Math.log(ipi.getPagesWhichContainWord(currWord).list.length());
+                        double idf = Math.log(ipi.entries.list.length()/ipi.getPagesWhichContainWord(currWord).list.length());
+                        if (idf == 0){
+                            idf =1;
+                        }
                         rel = rel + (tf * (float)idf);
                         break;
                     } else{

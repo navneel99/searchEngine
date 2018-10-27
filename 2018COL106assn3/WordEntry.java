@@ -21,19 +21,8 @@ public class WordEntry{
         return false;
     }
     public void addPosition(Position position) {
-        /*boolean tVal =true;
-        for (int l =0; l<poslist.length();l++){
-            Position currPos =poslist.getElementByIndex(l);
-            if (currPos.page.page.equals(position.page.page) && currPos.i == (position.i)){
-                tVal =false;
-                break;
-            }
-        }*/
-        //if (tVal){
                 poslist.addElement(position);
                 avl.root = avl.insert(avl.root, position);
-            
-        //}
     }
     public void addPositions(MyLinkedList<Position> positions) {
         for (int i =0; i< positions.length();i++){
@@ -55,10 +44,6 @@ public class WordEntry{
         return poslist;
     }
     static float getTotalNumberOfWords(PageEntry p){
-        /*if (p.page.equals("stack_cprogramming")){
-            System.out.print("stack_cprogramming Check::");
-            System.out.println(p.wholeText);
-        }*/
         int allWords = 0;
         int totWords = p.index.wordlist.length();
         for (int i = 0; i< totWords; i++){
@@ -78,13 +63,7 @@ public class WordEntry{
     public float getTermFrequency(PageEntry p){
         //float allWords = getTotalNumberOfWords(p);
         float all = 0;
-        /*for (int k = 0; k< p.index.wordlist.length();k++){
-            all+=p.index.wordlist.getElementByIndex(k).poslist.length();
-        }*/
         all = WordEntry.getTotalNumberOfWords(p);
-        /*if (p.page.equals("stack_cprogramming")){
-            System.out.println("Final check in WE: "+ all);
-        }*/
         float occInPage = 0;
         for (int i = 0;i<poslist.length();i++){
             Position currEle = poslist.getElementByIndex(i);
@@ -92,7 +71,6 @@ public class WordEntry{
                 occInPage++;
             }
         }
-       //System.out.println("The number of words in a page "+p.page+" excluding stop words are: "+all);
         float tf = occInPage/all;
         return tf;
     }
